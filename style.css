@@ -490,7 +490,6 @@ svg:hover {
   flex-direction: column;
   position: relative;
   width: 90%;
-
   background: url("./images/background2.jpg");
   background-size: cover;
   background-repeat: no-repeat;
