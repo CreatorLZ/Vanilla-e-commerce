@@ -2,60 +2,57 @@
 const wrapper = document.querySelector(".sliderwrapper");
 const sliderRight = document.querySelector(".moveslright");
 const centerItems = document.querySelectorAll(".centeritem");
-// const images = document.querySelectorAll('img[data-src]');
-// const animateOnScrollElements = document.querySelectorAll('.animate-on-scroll');
+const prevBtn = document.querySelector(".prev-btn");
+const nextBtn = document.querySelector(".next-btn");
 
-// Slide to the clicked center item
-centerItems.forEach((item, index) => {
-  item.addEventListener("click", () => {
-    wrapper.style.transform = `translateX(${-100 * index}vw)`;
-  });
+let currentIndex = 0;
+const totalItems = centerItems.length;
+
+// Slide functions
+const slideToIndex = (index) => {
+  currentIndex = index;
+  wrapper.style.transform = `translateX(${-100 * currentIndex}vw)`;
+};
+
+const slideNext = () => {
+  currentIndex = (currentIndex + 1) % totalItems;
+  slideToIndex(currentIndex);
+};
+
+const slidePrev = () => {
+  currentIndex = (currentIndex - 1 + totalItems) % totalItems;
+  slideToIndex(currentIndex);
+};
+
+// Event listeners
+prevBtn.addEventListener("click", slidePrev);
+nextBtn.addEventListener("click", slideNext);
+
+// Auto slide function
+const autoSlide = () => {
+  slideNext();
+};
+
+// Start auto sliding
+let slideInterval = setInterval(autoSlide, 5000);
+
+// Pause auto sliding when user interacts with controls
+const pauseAutoSlide = () => {
+  clearInterval(slideInterval);
+  // Restart after a short delay
+  setTimeout(() => {
+    slideInterval = setInterval(autoSlide, 5000);
+  }, 50000);
+};
+
+[prevBtn, nextBtn].forEach((btn) => {
+  btn.addEventListener("click", pauseAutoSlide);
 });
 
-// Preload images when they enter the viewport
-// function preloadImage(img) {
-//   const src = img.getAttribute('data-src');
-//   if (src) {
-//     img.src = src;
-//     img.removeAttribute('data-src');
-//   }
-// }
-
-// const imgObserver = new IntersectionObserver((entries, observer) => {
-//   entries.forEach((entry) => {
-//     if (entry.isIntersecting) {
-//       preloadImage(entry.target);
-//       imgObserver.unobserve(entry.target);
-//     }
-//   });
-// });
-
-// images.forEach((img) => {
-//   imgObserver.observe(img);
-// });
-
-// Function to check if an element is in the viewport
-// function isElementInViewport(element) {
-//   const rect = element.getBoundingClientRect();
-//   return (
-//     rect.top >= 0 &&
-//     rect.left >= 0 &&
-//     rect.bottom <= (window.innerHeight || document.documentElement.clientHeight) &&
-//     rect.right <= (window.innerWidth || document.documentElement.clientWidth)
-//   );
-// }
-
-// Function to apply the animation class when an element is in view
-// function animateOnScroll() {
-//   animateOnScrollElements.forEach(element => {
-//     if (isElementInViewport(element)) {
-//       element.classList.add('text-fade-in');
-//     }
-//   });
-// }
-
-// Initial animation check on page load
-// animateOnScroll();
-
-// Attach scroll event listener to trigger animation on scroll
-// window.addEventListener('scroll', animateOnScroll);
+// Slide to the clicked item
+centerItems.forEach((item, index) => {
+  item.addEventListener("click", () => {
+    slideToIndex(index);
+    pauseAutoSlide();
+  });
+});
