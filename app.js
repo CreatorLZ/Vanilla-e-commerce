@@ -34,7 +34,7 @@ const autoSlide = () => {
 };
 
 // Start auto sliding
-let slideInterval = setInterval(autoSlide, 5000);
+let slideInterval = setInterval(autoSlide, 9000);
 
 // Pause auto sliding when user interacts with controls
 const pauseAutoSlide = () => {
